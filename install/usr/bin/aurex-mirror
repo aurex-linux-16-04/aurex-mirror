@@ -1,0 +1,62 @@
+#!/bin/sh
+# File:        aurex-mirror
+# Description: Simple script to create mirrors using debmirror
+# Author:      Luis Antonio Garcia Gisbert <luisgg@gmail.com> 
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along 
+# with this program; if not, write to the Free Software Foundation, Inc., 
+# 51 Franklin St, Fifth Floor, Boston MA 02110-1301 USA
+# --------
+
+usage(){
+	echo "Usage: $(basename "$0") [--method={ftp|http|rsync}] [[{ubuntu|aurex} [{dist_codename}]]" >&2
+	echo "       defaults are: --method=$DEF_METHOD $DEF_VENDOR $DEF_DISTRI" >&2
+	exit 1
+}
+
+DEF_VENDOR="ubuntu"
+DEF_DISTRI="precise"
+DEF_METHOD="http"
+DEF_ARCH="i386,amd64"
+
+case "$1" in
+	--method=*)
+		METHOD="${1#--method=}"
+		shift
+		;;
+esac
+
+METHOD="${METHOD:-$DEF_METHOD}"
+VENDOR="${1:-$DEF_VENDOR}"
+DISTRI="${1:-$DEF_DISTRI}"
+ARCH_LIST="${1:-$DEF_ARCH}"
+
+VENDOR_CFG="/etc/aurex-mirror/vendor.d/${VENDOR}.cfg"
+[ -r "$VENDOR_CFG" ] || usage
+. $VENDOR_CFG
+
+case "$METHOD" in
+	rsync)
+		ROOT_DIR="$RSYNC_DIR"
+		;;
+	ftp|http)
+		;;
+	*)
+		usage
+		;;
+esac
+
+[ "$DIST_LIST" -a "$SECT_LIST" -a "$ARCH_HOST" -a "$ARCH_LIST" -a "$ROOT_DIR" ] || usage
+
+
+debmirror --nosource --ignore-small-errors --ignore-release-gpg --method=$METHOD --md5sums --progress --host=$ARCH_HOST --root=$ROOT_DIR --dist=$DIST_LIST --section=$SECT_LIST --arch=$ARCH_LIST  ./

@@ -1,0 +1,13 @@
+Source: aurex-mirror
+Section: admin
+Priority: optional
+Maintainer: Luis Antonio Garcia Gisbert <luisgg@gmail.com>
+Build-Depends: debhelper (>= 7.0)
+Standards-Version: 3.9.3
+
+Package: aurex-mirror
+Architecture: all
+Depends: ${misc:Depends}, debmirror
+Description: aurex mirror tools
+ The package installs all the required tools, scripts and configurations
+ to generate local mirrors of ubuntu and aurex
