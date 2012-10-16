@@ -1,3 +1,10 @@
+aurex-mirror (0.2) precise; urgency=low
+
+  * Remove some parameters from CLI and move them to
+    configuration file
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Wed, 17 Oct 2012 00:28:37 +0200
+
 aurex-mirror (0.1) unstable; urgency=low
 
   * Initial release.

@@ -19,37 +19,32 @@
 # --------
 
 usage(){
-	echo "Usage: $(basename "$0") [--method={ftp|http|rsync}] [[{ubuntu|aurex} [{dist_codename}]]" >&2
-	echo "       defaults are: --method=$DEF_METHOD $DEF_VENDOR $DEF_DISTRI" >&2
+	echo "Usage: $(basename "$0") CONF_NAME [MIRROR_DIRECTORY]" >&2
 	exit 1
 }
 
-DEF_VENDOR="ubuntu"
+[ "$1" ] || usage
+CONF_CFG="/etc/aurex-mirror/conf.d/${1}.cfg"
+[ -r "$CONF_CFG" ] || usage
+. $CONF_CFG
+
+DEF_MIRROR_DIR="$1"
+[ -z "$2" ] || MIRROR_DIR="$2"
 DEF_DISTRI="precise"
 DEF_METHOD="http"
 DEF_ARCH="i386,amd64"
 
-case "$1" in
-	--method=*)
-		METHOD="${1#--method=}"
-		shift
-		;;
-esac
-
 METHOD="${METHOD:-$DEF_METHOD}"
-VENDOR="${1:-$DEF_VENDOR}"
-DISTRI="${1:-$DEF_DISTRI}"
-ARCH_LIST="${1:-$DEF_ARCH}"
-
-VENDOR_CFG="/etc/aurex-mirror/vendor.d/${VENDOR}.cfg"
-[ -r "$VENDOR_CFG" ] || usage
-. $VENDOR_CFG
+DISTRI="${DISTRI-$DEF_DISTRI}"
+ARCH_LIST="${ARCH_LIST:-$DEF_ARCH}"
+MIRROR_DIR="${MIRROR_DIR:-$DEF_MIRROR_DIR}"
 
 case "$METHOD" in
 	rsync)
 		ROOT_DIR="$RSYNC_DIR"
 		;;
 	ftp|http)
+		METHOD="$METHOD --rsync-extra=none"
 		;;
 	*)
 		usage
@@ -58,5 +53,4 @@ esac
 
 [ "$DIST_LIST" -a "$SECT_LIST" -a "$ARCH_HOST" -a "$ARCH_LIST" -a "$ROOT_DIR" ] || usage
 
-
-debmirror --nosource --ignore-small-errors --ignore-release-gpg --method=$METHOD --md5sums --progress --host=$ARCH_HOST --root=$ROOT_DIR --dist=$DIST_LIST --section=$SECT_LIST --arch=$ARCH_LIST  ./
+debmirror --nosource --ignore-small-errors --ignore-release-gpg --method=$METHOD --md5sums --progress --host=$ARCH_HOST --root=$ROOT_DIR --dist=$DIST_LIST --section=$SECT_LIST --arch=$ARCH_LIST $MIRROR_DIR
