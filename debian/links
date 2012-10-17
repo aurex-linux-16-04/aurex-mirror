@@ -1,2 +1,2 @@
 /usr/share/aurex-mirror/conf.d/aurex.cfg	/etc/aurex-mirror/conf.d/aurex.cfg
-/usr/share/aurex-mirror/vendor.d/conf.cfg	/etc/aurex-mirror/conf.d/ubuntu.cfg
+/usr/share/aurex-mirror/conf.d/ubuntu.cfg	/etc/aurex-mirror/conf.d/ubuntu.cfg

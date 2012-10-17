@@ -1,3 +1,9 @@
+aurex-mirror (0.3) precise; urgency=low
+
+  * Fixed ubuntu configuration link
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Wed, 17 Oct 2012 16:58:12 +0200
+
 aurex-mirror (0.2) precise; urgency=low
 
   * Remove some parameters from CLI and move them to
