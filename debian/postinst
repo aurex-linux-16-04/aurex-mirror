@@ -1,0 +1,18 @@
+#!/bin/sh -e
+case "$1" in
+    configure)
+	adduser --quiet --group --system --home /var/run/aurex-mirror --shell /bin/sh  aurex-mirror
+	chgrp aurex-mirror /var/log/aurex-mirror
+	chmod g=rwx /var/log/aurex-mirror
+	chmod g+s /var/log/aurex-mirror
+        ;;
+    abort-upgrade|abort-remove|abort-deconfigure)
+        ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+        ;;
+esac
+
+#DEBHELPER#
