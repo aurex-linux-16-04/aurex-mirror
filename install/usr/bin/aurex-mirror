@@ -63,6 +63,10 @@ if [ $(id -u) -eq 0 ] || echo " $(groups) " |grep -q " aurex-mirror " ; then
 	DATESTAMP="$(date "+%b %d %Y %T") $HOSTNAME  ${BASE_NAME}: "
 	LAST_RUN="/var/log/aurex-mirror/${BASE_NAME}.last-run"
 	LOG_FILE="/var/log/aurex-mirror/${BASE_NAME}.log"
+	for f in $LAST_RUN $LOG_FILE ; do
+		touch "$f"
+		chmod g=rw "$f" 2>/dev/null || true
+	done
 	echo "$DATESTAMP START in $MIRROR_DIR ($METHOD,$ARCH_HOST)" >> $LOG_FILE
 
 	debmirror --nosource --ignore-small-errors --ignore-release-gpg --method=$METHOD --md5sums --progress --host=$ARCH_HOST --root=$ROOT_DIR --dist=$DIST_LIST --section=$SECT_LIST --arch=$ARCH_LIST $MIRROR_DIR 2>$LAST_RUN || rc=$?
