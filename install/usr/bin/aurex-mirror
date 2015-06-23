@@ -30,7 +30,7 @@ usage(){
 [ "$1" ] || usage
 BASE_NAME="$1"
 
-CONF_CFG="/etc/aurex-mirror/conf.d/aurex-mirror.cfg"
+CONF_CFG="/etc/aurex-mirror/aurex-mirror.cfg"
 [ ! -r "$CONF_CFG" ] || . $CONF_CFG
 
 CONF_CFG="/etc/aurex-mirror/conf.d/${1}.cfg"
