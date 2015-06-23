@@ -1,3 +1,9 @@
+aurex-mirror (0.7) trusty; urgency=medium
+
+  * Minor fixes
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Tue, 23 Jun 2015 18:25:15 +0200
+
 aurex-mirror (0.6) trusty; urgency=medium
 
   * New configuration variable BASE_DIR
