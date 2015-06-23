@@ -29,6 +29,10 @@ usage(){
 
 [ "$1" ] || usage
 BASE_NAME="$1"
+
+CONF_CFG="/etc/aurex-mirror/conf.d/aurex-mirror.cfg"
+[ ! -r "$CONF_CFG" ] || . $CONF_CFG
+
 CONF_CFG="/etc/aurex-mirror/conf.d/${1}.cfg"
 [ -r "$CONF_CFG" ] || usage
 . $CONF_CFG
@@ -38,11 +42,13 @@ DEF_MIRROR_DIR="$1"
 DEF_DISTRI="precise"
 DEF_METHOD="http"
 DEF_ARCH="i386,amd64"
+DEF_BASEDIR=""
 
 METHOD="${METHOD:-$DEF_METHOD}"
 DISTRI="${DISTRI-$DEF_DISTRI}"
 ARCH_LIST="${ARCH_LIST:-$DEF_ARCH}"
-MIRROR_DIR="${MIRROR_DIR:-$DEF_MIRROR_DIR}"
+BASE_DIR="${BASE_DIR:-$DEF_BASE_DIR}"
+MIRROR_DIR="${BASE_DIR}/${MIRROR_DIR:-$DEF_MIRROR_DIR}"
 
 case "$METHOD" in
 	rsync)
