@@ -1,3 +1,10 @@
+aurex-mirror (0.10) trusty; urgency=medium
+
+  * Added support for .pre and .post hook scripts
+  * New binary 
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Mon, 02 Nov 2015 17:43:19 +0100
+
 aurex-mirror (0.9) trusty; urgency=medium
 
   * Updated configuration files

@@ -1,2 +1,3 @@
 /etc/aurex-mirror/conf.d/
+/etc/aurex-mirror/scripts.d/
 /var/log/aurex-mirror/
