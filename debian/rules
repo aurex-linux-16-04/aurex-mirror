@@ -4,7 +4,7 @@
 	dh $@ --parallel
 
 override_dh_link:
-	ls -1 install/usr/share/aurex-mirror/conf.d/ |while read f; do echo "/usr/share/aurex-mirror/conf.d/$$f /etc/aurex-mirror/conf.d/$$f" > debian/links; done
+	ls -1 install/usr/share/aurex-mirror/conf.d/ |while read f; do echo "/usr/share/aurex-mirror/conf.d/$$f /etc/aurex-mirror/conf.d/$$f" >> debian/links; done
 	dh_link
 	rm debian/links
 
