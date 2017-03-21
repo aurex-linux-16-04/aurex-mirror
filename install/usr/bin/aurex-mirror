@@ -43,12 +43,16 @@ DEF_DISTRI="precise"
 DEF_METHOD="http"
 DEF_ARCH="i386,amd64"
 DEF_BASEDIR=""
+DEF_TRANS_TYPES="bz2 gz xz"
+DEF_INCLUDE_LANGS="en.* es"
 
 METHOD="${METHOD:-$DEF_METHOD}"
 DISTRI="${DISTRI-$DEF_DISTRI}"
 ARCH_LIST="${ARCH_LIST:-$DEF_ARCH}"
 BASE_DIR="${BASE_DIR:-$DEF_BASE_DIR}"
 MIRROR_DIR="${BASE_DIR}${MIRROR_DIR:-$DEF_MIRROR_DIR}"
+TRANS_TYPES="${TRANS_TYPES:-$DEF_TRANS_TYPES}"
+INCLUDE_LANGS="${INCLUDE_LANGS:-$DEF_INCLUDE_LANGS}"
 
 export METHOD DISTRI ARCH_LIST MIRROR_DIR
 
@@ -88,7 +92,15 @@ if [ $(id -u) -eq 0 ] || echo " $(groups) " |grep -q " aurex-mirror " ; then
 	echo "$DATESTAMP START in $MIRROR_DIR ($METHOD,$ARCH_HOST)" >> $LOG_FILE
 
 	rc=0
-	debmirror --nosource --ignore-small-errors --ignore-release-gpg --method=$METHOD --md5sums --progress --host=$ARCH_HOST --root=$ROOT_DIR --dist=$DIST_LIST --section=$SECT_LIST --arch=$ARCH_LIST $MIRROR_DIR 2>$LAST_RUN || rc=$?
+	EXCLUDE_OPTION=""
+	INCLUDE_OPTION=""
+	for t in $TRANS_TYPES ; do
+		EXCLUDE_OPTION="$EXCLUDE_OPTION --exclude='/Translation-.*\.${t}$'"
+		for l in $INCLUDE_LANGS ; do
+			INCLUDE_OPTION="$INCLUDE_OPTION --include='/Translation-${l}\.${t}$'"
+		done
+	done
+	debmirror --nosource --ignore-small-errors --ignore-release-gpg --method=$METHOD --md5sums --progress --host=$ARCH_HOST --root=$ROOT_DIR --dist=$DIST_LIST --section=$SECT_LIST --arch=$ARCH_LIST --i18n $EXCLUDE_OPTION $INCLUDE_OPTION $MIRROR_DIR 2>$LAST_RUN || rc=$?
 
 	DATESTAMP="$(date "+%b %d %Y %T") $HOSTNAME  ${BASE_NAME}: "
 	echo "$DATESTAMP END (Exit status: $rc)" >> $LOG_FILE
